@@ -18,7 +18,6 @@
     "resolveJsonModule": true,
     "jsx": "react",
     "removeComments": true,
- 
   },
   "include": [
     "src/**/*"
