@@ -6,7 +6,7 @@ import App from '../App'
 describe('App component',()=>{
     it('Сomponent should be rendered',()=>{
         render(<App/>)
-        const text = screen.getByText(/app/i)
+        const text = screen.getByRole('main')
         expect(text).toBeInTheDocument()
     })
    
