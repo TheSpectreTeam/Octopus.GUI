@@ -11,11 +11,8 @@ jest.spyOn(global.console, "warn").mockImplementation();
 
 describe("Compose function", () => {
     it("should execute all passed arguments into compose function", () => {
-        const addWithMul = compose(mul, sum, 4);
+        const addWithMul = compose(mul, sum);
         expect(addWithMul(1, 2)).toBe(6);
-        expect(console.warn).toBeCalledWith(
-            "Some arguments was deleted, because this is not function"
-        );
     });
     it("should execite if passed rest function into compose", () => {
         const restArgsFn = compose(sumRestArgs);
