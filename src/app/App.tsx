@@ -1,10 +1,13 @@
-import React from 'react'
-import { withProviders } from './providers'
+import React from "react";
+import Layout from "../layouts";
+import { withProviders } from "./providers";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <main>
+      <Layout />
+    </main>
+  );
+};
 
-export default withProviders(App)
+export default withProviders(App);
