@@ -3,6 +3,7 @@ import {
     Avatar,
     Box,
     Button,
+    chakra,
     Flex,
     Heading,
     HStack,
@@ -31,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = () => {
     };
 
     return (
-        <Box>
+        <chakra.header >
             <Flex
                 height={20}
                 flexDir="row"
@@ -94,7 +95,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                     </Flex>
                 </Box>
             </Flex>
-        </Box>
+        </chakra.header>
     );
 };
 
