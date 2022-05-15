@@ -39,16 +39,11 @@ const NavItem: React.FC<NavItemProps> = ({
         >
             <Link
                 as={IconButton}
-                isExternal
-                href={"https://google.com"}
                 key={index}
                 size={"lg"}
                 onClick={() => setActive(index)}
                 aria-label="Search database"
                 variant={"ghost"}
-                _focus={{ textDecor: "none" }}
-                _hover={{ background: "none" }}
-                _active={{ background: "none" }}
                 icon={
                     <Icon
                         as={item.icon}
