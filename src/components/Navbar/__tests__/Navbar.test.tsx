@@ -11,7 +11,7 @@ describe("Navbar component", () => {
     });
     it("should render auth button", () => {
         render(<Navbar />);
-        const loginButton = screen.getByRole("button");
+        const loginButton = screen.getByRole("button", {name:/login/i});
         expect(loginButton).toBeInTheDocument();
     });
     it("should render Avatar and logout button after click to Login button", () => {
