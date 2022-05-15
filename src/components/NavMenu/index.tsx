@@ -38,22 +38,26 @@ const NavItem: React.FC<NavItemProps> = ({
             key={index}
         >
             <Link
-                as={IconButton}
                 key={index}
-                size={"lg"}
-                onClick={() => setActive(index)}
-                aria-label="Search database"
-                variant={"ghost"}
-                icon={
-                    <Icon
-                        as={item.icon}
-                        w={isActive ? "40px" : "24px"}
-                        h={isActive ? "40px" : "24px"}
-                        style={{ transition: "0.5s" }}
-                        color={isActive ? "blue.400" : "grey.400"}
-                    />
-                }
-            />
+            >
+                <IconButton
+                    aria-label="Navigation"
+                    onClick={() => setActive(index)}
+                    variant="ghost"
+                    _hover={{ background: "none", transform: "translateY(-2px) " }}
+                    _focus={{ background: "none" }}
+                    _active={{ background: "none" }}
+                    icon={
+                        <Icon
+                            as={item.icon}
+                            w={isActive ? "40px" : "24px"}
+                            h={isActive ? "40px" : "24px"}
+                            style={{ transition: "0.5s" }}
+                            color={isActive ? "blue.400" : "grey.400"}
+                        />
+                    }
+                ></IconButton>
+            </Link>
         </Tooltip>
     );
 };
