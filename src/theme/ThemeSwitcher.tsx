@@ -9,13 +9,24 @@ export const ThemeSwitcher: React.FC = () => {
             mx="2em"
             size={"sm"}
             aria-label="Switch theme"
+            data-testid="theme-switcher"
             variant={"ghost"}
             onClick={toggleColorMode}
             icon={
                 colorMode === "light" ? (
-                    <MoonIcon color="gray.300" width={"24px"} height={"24px"} />
+                    <MoonIcon
+                        data-tesid="to-dark-theme"
+                        color="gray.300"
+                        width={"24px"}
+                        height={"24px"}
+                    />
                 ) : (
-                    <SunIcon color="gray.300" width={"24px"} height={"24px"} />
+                    <SunIcon
+                        data-testid="to-ligth-theme"
+                        color="gray.300"
+                        width={"24px"}
+                        height={"24px"}
+                    />
                 )
             }
         />
