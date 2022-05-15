@@ -1,7 +1,9 @@
-import { Box, Button, chakra, Flex } from "@chakra-ui/react";
 import React from "react";
+import { Box, chakra, Flex } from "@chakra-ui/react";
+
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import NavMenu from "../components/NavMenu";
 
 type Props = {
     children?: React.ReactNode;
@@ -9,17 +11,23 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
     return (
-        <Box minH={"100vh"}>
+        <Box minH={"100vh"} minWidth={"320px"}>
             <Navbar />
-            <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex
+                flexDirection={{ base: "column", md: "row" }}
+                position="relative"
+            >
                 <Sidebar>
-                    <NavItems />
+                    <NavMenu />
                 </Sidebar>
                 <chakra.main
-                    width={"full"}
+                    width={{ base: "calc(100% - 2em)", md: "calc(100vw - 112px)" }}
+                    height={'full'}
                     role={"main"}
-                    padding={"1rem"}
-                    marginLeft={{ base: "none", md: 20 }}
+                    aria-label="Main content"
+                    marginLeft={{ base: "1em", md: 20 }}
+                    marginRight={{ base: "1em", md: 5 }}
+                    marginBottom={{ base: 20, md: 0 }}
                 >
                     {children}
                 </chakra.main>
@@ -27,16 +35,5 @@ const Layout: React.FC<Props> = ({ children }) => {
         </Box>
     );
 };
-//TODO: Remove this demo component
-const NavItems = () => {
-    return (
-        <>
-            {Array(5)
-                .fill(1)
-                .map(() => (
-                    <div>NAV</div>
-                ))}
-        </>
-    );
-};
+
 export default Layout;
