@@ -1,12 +1,12 @@
 import { ComponentWithAs, IconProps } from "@chakra-ui/react";
 import { ConfigIcon, InfoIcon, StatsIcon, HelpIcon } from "../assets";
 
-export type NavItem = {
+export type NavigationItem = {
     label: string;
     icon: ComponentWithAs<"svg", IconProps>;
 };
 
-export const navItems: NavItem[] = [
+export const NAV_ITEMS: NavigationItem[] = [
     {
         label: "Statistics",
         icon: StatsIcon,

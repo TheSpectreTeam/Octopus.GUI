@@ -1,6 +1,7 @@
 import { Flex, Icon, IconButton, Link, Stack, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import { navItems, NavItem } from "../../common/navItems";
+import { NavigationItem } from "../../common/navItems";
+import { NAV_ITEMS } from "../../common/navItems";
 
 const NavMenu: React.FC = () => {
     return (
@@ -12,19 +13,19 @@ const NavMenu: React.FC = () => {
             justifyContent={{ base: "space-around", md: "center" }}
             spacing="1em"
         >
-            <NavItems NavComponent={NavItem} items={navItems} />
+            <NavItems NavComponent={NavItem} items={NAV_ITEMS} />
         </Stack>
     );
 };
 
 type NavItemProps = {
-    item: NavItem;
+    item: NavigationItem;
     isActive: boolean;
     setActive: (index: number) => void;
     index: number;
 };
 
-const NavItem: React.FC<NavItemProps> = ({
+export const NavItem: React.FC<NavItemProps> = ({
     item,
     index,
     isActive,
@@ -37,14 +38,15 @@ const NavItem: React.FC<NavItemProps> = ({
             label={item.label}
             key={index}
         >
-            <Link
-                key={index}
-            >
+            <Link key={index}>
                 <IconButton
                     aria-label="Navigation"
                     onClick={() => setActive(index)}
                     variant="ghost"
-                    _hover={{ background: "none", transform: "translateY(-2px) " }}
+                    _hover={{
+                        background: "none",
+                        transform: "translateY(-2px) ",
+                    }}
                     _focus={{ background: "none" }}
                     _active={{ background: "none" }}
                     icon={
@@ -63,11 +65,11 @@ const NavItem: React.FC<NavItemProps> = ({
 };
 
 export type NavItemsProps = {
-    items: NavItem[];
+    items: NavigationItem[];
     NavComponent: React.FC<NavItemProps>;
 };
 
-const NavItems: React.FC<NavItemsProps> = ({
+export const NavItems: React.FC<NavItemsProps> = ({
     items,
     NavComponent = NavItem,
 }) => {
