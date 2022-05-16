@@ -12,6 +12,7 @@ const NavMenu: React.FC = () => {
             direction={{ base: "row", md: "column" }}
             justifyContent={{ base: "space-around", md: "center" }}
             spacing="1em"
+            role='group'
         >
             <NavItems NavComponent={NavItem} items={NAV_ITEMS} />
         </Stack>
@@ -38,7 +39,7 @@ export const NavItem: React.FC<NavItemProps> = ({
             label={item.label}
             key={index}
         >
-            <Link key={index}>
+            <Link key={index} role="link">
                 <IconButton
                     aria-label="Navigation"
                     onClick={() => setActive(index)}
