@@ -3,6 +3,7 @@ import {
     Avatar,
     Box,
     Button,
+    chakra,
     Flex,
     Heading,
     HStack,
@@ -13,7 +14,9 @@ import {
     Spacer,
     Stack,
     Text,
+    useColorModeValue,
 } from "@chakra-ui/react";
+import { ThemeSwitcher } from "../../theme/ThemeSwitcher";
 
 type NavbarProps = {};
 
@@ -31,15 +34,21 @@ const Navbar: React.FC<NavbarProps> = () => {
     };
 
     return (
-        <Box>
+        <chakra.header>
             <Flex
                 height={20}
                 flexDir="row"
                 minWidth={"min-content"}
                 alignItems={"center"}
                 justifyContent={"space-between"}
+                borderBottom={{ base: "1px solid", md: "none" }}
+                borderColor={{
+                    base: useColorModeValue("gray.200", "gray.700"),
+                }}
             >
-                <Flex w={"30%"} />
+                <Flex w={"30%"}>
+                    <ThemeSwitcher />
+                </Flex>
                 <Spacer />
                 <Box>
                     <Stack align={"center"}>
@@ -53,7 +62,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                     <Flex alignContent="center" justifyContent={"end"}>
                         {isAuth ? (
                             <HStack>
-                                <Menu data-testid='profile-menu'>
+                                <Menu data-testid="profile-menu">
                                     <MenuButton
                                         as={Button}
                                         rounded={"full"}
@@ -94,7 +103,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                     </Flex>
                 </Box>
             </Flex>
-        </Box>
+        </chakra.header>
     );
 };
 

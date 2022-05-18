@@ -21,6 +21,7 @@
         "start:dev": "cross-env NODE_ENV=development webpack serve --open"
     },
     "dependencies": {
+        "@chakra-ui/icons": "^2.0.0",
         "@chakra-ui/react": "2.0.0-next.4",
         "@emotion/react": "latest",
         "@emotion/styled": "latest",
@@ -29,8 +30,6 @@
         "react-dom": "18.1.0"
     },
     "devDependencies": {
-        "@types/react": "18.0.9",
-        "@types/react-dom": "18.0.3",
         "@babel/cli": "^7.17.6",
         "@babel/core": "^7.17.9",
         "@babel/plugin-transform-runtime": "^7.17.0",
@@ -41,6 +40,8 @@
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^13.1.1",
         "@types/jest": "^27.4.1",
+        "@types/react": "18.0.9",
+        "@types/react-dom": "18.0.3",
         "autoprefixer": "^10.4.4",
         "babel-eslint": "^10.1.0",
         "babel-loader": "^8.2.5",

@@ -18,8 +18,9 @@
     "resolveJsonModule": true,
     "jsx": "react",
     "removeComments": true,
+    "paths": {"test-utils":["./src/utils/test-utils"]}
   },
   "include": [
-    "src/**/*"
+    "src", "src/types"
   ]
 }

@@ -1,22 +1,21 @@
 import React from "react";
-import { screen, render, fireEvent } from "@testing-library/react";
-
+import { screen, render, fireEvent } from "test-utils";
 import Navbar from "..";
+
+beforeEach(() => {
+    render(<Navbar />);
+});
 
 describe("Navbar component", () => {
     it("Сomponent should be rendered", () => {
-        render(<Navbar />);
         const text = screen.getByRole("heading");
         expect(text).toBeInTheDocument();
     });
     it("should render auth button", () => {
-        render(<Navbar />);
-        const loginButton = screen.getByRole("button");
+        const loginButton = screen.getByRole("button", { name: /login/i });
         expect(loginButton).toBeInTheDocument();
     });
     it("should render Avatar and logout button after click to Login button", () => {
-        render(<Navbar />);
-
         const button = screen.getByRole("button", { name: /login/i });
 
         expect(button).toBeInTheDocument();
