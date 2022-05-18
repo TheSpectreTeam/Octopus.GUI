@@ -1,5 +1,6 @@
 import { Flex, Icon, IconButton, Link, Stack, Tooltip } from "@chakra-ui/react";
 import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { NavigationItem } from "../../common/navItems";
 import { NAV_ITEMS } from "../../common/navItems";
 
@@ -21,17 +22,15 @@ const NavMenu: React.FC = () => {
 
 type NavItemProps = {
     item: NavigationItem;
-    isActive: boolean;
-    setActive: (index: number) => void;
     index: number;
 };
 
 export const NavItem: React.FC<NavItemProps> = ({
     item,
     index,
-    isActive,
-    setActive,
 }) => {
+    const location = useLocation()
+    const isActive = location.pathname === item.path;
     return (
         <Tooltip
             placement={"auto-end"}
@@ -39,10 +38,9 @@ export const NavItem: React.FC<NavItemProps> = ({
             label={item.label}
             key={index}
         >
-            <Link key={index} role="link">
+            <Link key={index} as={NavLink} to={item.path} role="link">
                 <IconButton
                     aria-label="Navigation"
-                    onClick={() => setActive(index)}
                     variant="ghost"
                     _hover={{
                         background: "none",
@@ -74,18 +72,17 @@ export const NavItems: React.FC<NavItemsProps> = ({
     items,
     NavComponent = NavItem,
 }) => {
-    const [active, setActive] = React.useState<number>(0);
+    
+    console.log(location)
     return (
         <>
             {items.map((item: any, index: number) => {
-                const isActive = active === index;
+              
                 return (
                     <NavComponent
-                        key={index}
+                        key={item.label}
                         item={item}
                         index={index}
-                        isActive={isActive}
-                        setActive={setActive}
                     />
                 );
             })}
