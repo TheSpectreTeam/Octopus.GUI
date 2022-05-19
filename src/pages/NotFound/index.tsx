@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ROUTES } from "../../routes";
 import { variants } from "../../theme/animations";
 
-const NotFoundPage = () => {
+const NotFound = () => {
     return (
         <motion.div
             initial="exit"
@@ -13,7 +13,7 @@ const NotFoundPage = () => {
             exit="exit"
             variants={variants}
         >
-            <Box textAlign="center" py={10} px={6}>
+            <Box textAlign="center" py={10} px={6} data-testid="not-found-page">
                 <Heading
                     display="inline-block"
                     as="h2"
@@ -44,4 +44,4 @@ const NotFoundPage = () => {
     );
 };
 
-export default NotFoundPage;
+export default NotFound;

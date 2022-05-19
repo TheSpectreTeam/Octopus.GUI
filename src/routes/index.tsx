@@ -1,23 +1,29 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import NotFoundPage from "../pages/NotFound";
+import { Route, Routes} from "react-router-dom";
+import Loader from "../common/Loader";
+
 
 const AdministrationPage = React.lazy(() => import("../pages/Administration"));
+const NotFoundPage = React.lazy(()=> import("../pages/NotFound"))
 
-export const ROUTES ={
-    administration:'/admin',
-    home:'/'
-}
+export const ROUTES = {
+    administration: "/admin",
+    home: "/",
+};
 
 const Routing = () => {
-    const location = useLocation()
     return (
-        <AnimatePresence exitBeforeEnter >
-            <Routes location={location} key={location.pathname}>
-                <Route path={ROUTES.administration} element={<AdministrationPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+        <AnimatePresence exitBeforeEnter>
+            <React.Suspense fallback={<Loader />}>
+                <Routes >
+                    <Route
+                        path={ROUTES.administration}
+                        element={<AdministrationPage />}
+                    />
+                    <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+            </React.Suspense>
         </AnimatePresence>
     );
 };

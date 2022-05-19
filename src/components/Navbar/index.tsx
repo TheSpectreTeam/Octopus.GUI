@@ -5,14 +5,11 @@ import {
     Button,
     chakra,
     Flex,
-    Heading,
     HStack,
     Menu,
     MenuButton,
     MenuItem,
     MenuList,
-    Spacer,
-    Stack,
     Text,
     useColorModeValue,
 } from "@chakra-ui/react";
@@ -49,15 +46,6 @@ const Navbar: React.FC<NavbarProps> = () => {
                 <Flex w={"30%"}>
                     <ThemeSwitcher />
                 </Flex>
-                <Spacer />
-                <Box>
-                    <Stack align={"center"}>
-                        <Heading as="h5" size={"lg"} role="heading">
-                            Octopus
-                        </Heading>
-                    </Stack>
-                </Box>
-                <Spacer />
                 <Box w={"30%"} mx="2em" alignItems={"center"}>
                     <Flex alignContent="center" justifyContent={"end"}>
                         {isAuth ? (

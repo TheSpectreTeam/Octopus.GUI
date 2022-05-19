@@ -7,7 +7,8 @@ beforeEach(() => {
 });
 
 describe("Navbar component", () => {
-    it("Сomponent should be rendered", () => {
+    it("Сomponent should be rendered", () => {\
+        //FIXME: fix render test
         const text = screen.getByRole("heading");
         expect(text).toBeInTheDocument();
     });

@@ -4,11 +4,10 @@ import React from "react";
 const Loader: React.FC = () => {
     return (
         <Box
-            display={"flex"}
-            height="100vh"
-            width={"100vw"}
-            justifyContent="center"
-            alignItems={"center"}
+            height={"calc(100vh - 160px)"}
+            display="flex"
+            justifyContent={"center"}
+            alignItems="center"
         >
             <CircularProgress isIndeterminate color="blue.300" />
         </Box>
