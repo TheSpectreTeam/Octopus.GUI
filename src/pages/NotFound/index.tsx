@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Button, Heading, Link, Text } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion } from "framer-motion";
+
 import { ROUTES } from "../../routes";
 import { variants } from "../../theme/animations";
 

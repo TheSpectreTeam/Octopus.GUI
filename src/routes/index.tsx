@@ -1,8 +1,9 @@
-import { AnimatePresence } from "framer-motion";
-import React from "react";
-import { Route, Routes} from "react-router-dom";
-import Loader from "../common/Loader";
 
+import React from "react";
+import { AnimatePresence } from "framer-motion";
+import { Route, Routes} from "react-router-dom";
+
+import Loader from "../common/Loader";
 
 const AdministrationPage = React.lazy(() => import("../pages/Administration"));
 const NotFoundPage = React.lazy(()=> import("../pages/NotFound"))

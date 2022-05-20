@@ -1,5 +1,6 @@
-import { Flex, Icon, IconButton, Link, Stack, Tooltip } from "@chakra-ui/react";
 import React from "react";
+import { Flex, Icon, IconButton, Link, Stack, Tooltip } from "@chakra-ui/react";
+
 import { NavLink, useLocation } from "react-router-dom";
 import { NavigationItem } from "../../common/navItems";
 import { NAV_ITEMS } from "../../common/navItems";
@@ -13,7 +14,7 @@ const NavMenu: React.FC = () => {
             direction={{ base: "row", md: "column" }}
             justifyContent={{ base: "space-around", md: "center" }}
             spacing="1em"
-            role='group'
+            role="group"
         >
             <NavItems NavComponent={NavItem} items={NAV_ITEMS} />
         </Stack>
@@ -25,11 +26,8 @@ type NavItemProps = {
     index: number;
 };
 
-export const NavItem: React.FC<NavItemProps> = ({
-    item,
-    index,
-}) => {
-    const location = useLocation()
+export const NavItem: React.FC<NavItemProps> = ({ item, index }) => {
+    const location = useLocation();
     const isActive = location.pathname === item.path;
     return (
         <Tooltip
@@ -44,7 +42,7 @@ export const NavItem: React.FC<NavItemProps> = ({
                     variant="ghost"
                     _hover={{
                         background: "none",
-                        transform: "translateY(-2px) ",
+                        transform: "translateY(-2px)",
                     }}
                     _focus={{ background: "none" }}
                     _active={{ background: "none" }}
@@ -72,18 +70,11 @@ export const NavItems: React.FC<NavItemsProps> = ({
     items,
     NavComponent = NavItem,
 }) => {
-    
-    console.log(location)
     return (
         <>
             {items.map((item: any, index: number) => {
-              
                 return (
-                    <NavComponent
-                        key={item.label}
-                        item={item}
-                        index={index}
-                    />
+                    <NavComponent key={item.label} item={item} index={index} />
                 );
             })}
         </>

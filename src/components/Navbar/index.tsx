@@ -13,6 +13,7 @@ import {
     Text,
     useColorModeValue,
 } from "@chakra-ui/react";
+
 import { ThemeSwitcher } from "../../theme/ThemeSwitcher";
 
 type NavbarProps = {};
