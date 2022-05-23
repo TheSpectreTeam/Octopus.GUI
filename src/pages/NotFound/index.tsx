@@ -1,20 +1,14 @@
 import React from "react";
 import { Box, Button, Heading, Link, Text } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import { motion } from "framer-motion";
 
+import MotionWrapper from "../../components/MotionWrapper";
 import { ROUTES } from "../../routes";
-import { variants } from "../../theme/animations";
 
 const NotFound = () => {
     return (
-        <motion.div
-            initial="exit"
-            animate="enter"
-            exit="exit"
-            variants={variants}
-        >
-            <Box textAlign="center" py={10} px={6} data-testid="not-found-page">
+        <MotionWrapper data-testid="not-found-page">
+            <Box textAlign="center" py={10} px={6}>
                 <Heading
                     display="inline-block"
                     as="h2"
@@ -30,7 +24,7 @@ const NotFound = () => {
                 <Text color={"gray.500"} mb={6}>
                     The page you're looking for does not seem to exist
                 </Text>
-                <Link as={RouterLink} to={ROUTES.administration}>
+                <Link as={RouterLink} to={ROUTES.administration.pathname}>
                     <Button
                         colorScheme="blue"
                         bgGradient="linear(to-r, blue.400, blue.500, blue.600)"
@@ -41,7 +35,7 @@ const NotFound = () => {
                     </Button>
                 </Link>
             </Box>
-        </motion.div>
+        </MotionWrapper>
     );
 };
 
