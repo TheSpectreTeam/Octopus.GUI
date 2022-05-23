@@ -17,6 +17,7 @@ const colors = {
 const components = {
     Card,
 };
+
 const styles = {
     global: (props: any) => ({
         "html, body": {
