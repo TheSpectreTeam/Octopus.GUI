@@ -1,18 +1,17 @@
 import React from "react";
 
+import { Flex } from "@chakra-ui/react";
+
 import PageTitle from "../../layouts/PageTitle";
 import MotionWrapper from "../../components/MotionWrapper";
-import Card from "../../components/Card";
-import { Flex } from "@chakra-ui/react";
+import Conductor from "../../features/Conductor";
 
 const Administration: React.FC = () => {
     return (
         <MotionWrapper data-testid="administration-page">
             <PageTitle />
-
             <Flex gap={6} width="" flexWrap={"wrap"}>
-                <Card variant="flat" height={200} width={400}>Conductor</Card>
-                <Card variant="flat" width={600}>Dynamic Entitys</Card>
+                <Conductor />
             </Flex>
         </MotionWrapper>
     );
