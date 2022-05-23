@@ -2,8 +2,7 @@ import React from "react";
 import { Flex, Icon, IconButton, Link, Stack, Tooltip } from "@chakra-ui/react";
 
 import { NavLink, useLocation } from "react-router-dom";
-import { NavigationItem } from "../../common/navItems";
-import { NAV_ITEMS } from "../../common/navItems";
+import { Route, Routes, ROUTES } from "../../routes";
 
 const NavMenu: React.FC = () => {
     return (
@@ -16,27 +15,29 @@ const NavMenu: React.FC = () => {
             spacing="1em"
             role="group"
         >
-            <NavItems NavComponent={NavItem} items={NAV_ITEMS} />
+            <NavItems NavComponent={NavItem} items={ROUTES} />
         </Stack>
     );
 };
 
 type NavItemProps = {
-    item: NavigationItem;
+    item: Route;
     index: number;
 };
 
 export const NavItem: React.FC<NavItemProps> = ({ item, index }) => {
+    
     const location = useLocation();
-    const isActive = location.pathname === item.path;
+    const isActive = location.pathname === item.pathname;
+
     return (
         <Tooltip
             placement={"auto-end"}
             openDelay={300}
-            label={item.label}
+            label={item.title}
             key={index}
         >
-            <Link key={index} as={NavLink} to={item.path} role="link">
+            <Link key={index} as={NavLink} to={item.pathname} role="link">
                 <IconButton
                     aria-label="Navigation"
                     variant="ghost"
@@ -62,7 +63,7 @@ export const NavItem: React.FC<NavItemProps> = ({ item, index }) => {
 };
 
 export type NavItemsProps = {
-    items: NavigationItem[];
+    items: Routes;
     NavComponent: React.FC<NavItemProps>;
 };
 
@@ -72,10 +73,8 @@ export const NavItems: React.FC<NavItemsProps> = ({
 }) => {
     return (
         <>
-            {items.map((item: any, index: number) => {
-                return (
-                    <NavComponent key={item.label} item={item} index={index} />
-                );
+            {Object.values(items).map((item: Route, index: number) => {
+                return <NavComponent key={index} item={item} index={index} />;
             })}
         </>
     );

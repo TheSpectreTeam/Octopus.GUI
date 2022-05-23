@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, Icon } from "@chakra-ui/react";
 import { WarningTwoIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
 import { Route, ROUTES } from "../routes";
@@ -25,7 +25,7 @@ const PageTitle: React.FC<Props> = () => {
                 gap={3}
                 alignItems={"center"}
             >
-                {ROUTE?.icon || <WarningTwoIcon w={30} h={30} />}
+                {<Icon width={8} height={8} as={ROUTE?.icon} /> || <WarningTwoIcon w={30} h={30} />}
                 <Heading as={"h2"} size={"md"}>
                     {ROUTE?.title || "Undefined Page"}
                 </Heading>
