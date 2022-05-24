@@ -7,52 +7,22 @@ import {
     Flex,
     Heading,
     IconButton,
-    Table as ChakraTable,
+    Table,
     Thead,
     Tbody,
     Tr,
     Th,
     Td,
     chakra,
+    Badge,
+    Code,
 } from "@chakra-ui/react";
 
-import { useTable, useSortBy, Column } from "react-table";
+import { useTable, useSortBy, Column, useExpanded } from "react-table";
 import React from "react";
 import Card from "../../common/Card";
 
 const DynamicEntities = () => {
-    return (
-        <Card width={900} height={600}>
-            <Flex
-                width={"100%"}
-                direction={"row"}
-                alignItems={"center"}
-                justifyContent="space-between"
-            >
-                <Flex>
-                    <Heading as="h2" size="sm">
-                        Dynaminc entities
-                    </Heading>
-                </Flex>
-                <Flex gap={3}>
-                    <IconButton
-                        aria-label="button"
-                        size="sm"
-                        variant={"ghost"}
-                        icon={<DragHandleIcon />}
-                    />
-                </Flex>
-            </Flex>
-            <Flex width={"100%"}>
-                <Table />
-            </Flex>
-        </Card>
-    );
-};
-
-export default DynamicEntities;
-
-const Table = () => {
     type DynamicEntityDBProperty = {
         dataBaseTypeName: string;
         length: number;
@@ -60,16 +30,19 @@ const Table = () => {
         isKey: boolean;
         comment: string;
     };
+
     type DataProperty = {
         propertyName: string;
         systemTypeName: string; //union
         valueIndex: number;
         dynamicEntityDataBaseProperty: DynamicEntityDBProperty;
     };
+
     type Data = {
         entityName: string;
         properties: Array<DataProperty>;
     };
+
     const data: Data[] = React.useMemo(
         (): Data[] => [
             {
@@ -99,6 +72,52 @@ const Table = () => {
                             length: 25,
                         },
                     },
+                    {
+                        propertyName: "Sex",
+                        valueIndex: 2,
+                        systemTypeName: "String",
+                        dynamicEntityDataBaseProperty: {
+                            comment: "entity type",
+                            dataBaseTypeName: "string",
+                            isKey: false,
+                            isNotNull: true,
+                            length: 25,
+                        },
+                    },
+                ],
+            },
+            {
+                entityName: "Employee",
+                properties: [
+                    {
+                        propertyName: "ID",
+                        valueIndex: 3,
+                        systemTypeName: "Int32",
+                        dynamicEntityDataBaseProperty: {
+                            comment: "text",
+                            dataBaseTypeName: "int",
+                            isKey: false,
+                            isNotNull: true,
+                            length: 25,
+                        },
+                    },
+                ],
+            },
+            {
+                entityName: "Tank",
+                properties: [
+                    {
+                        propertyName: "ID",
+                        valueIndex: 4,
+                        systemTypeName: "Int32",
+                        dynamicEntityDataBaseProperty: {
+                            comment: "text",
+                            dataBaseTypeName: "int",
+                            isKey: false,
+                            isNotNull: true,
+                            length: 25,
+                        },
+                    },
                 ],
             },
             {
@@ -106,7 +125,7 @@ const Table = () => {
                 properties: [
                     {
                         propertyName: "ID",
-                        valueIndex: 0,
+                        valueIndex: 5,
                         systemTypeName: "Int32",
                         dynamicEntityDataBaseProperty: {
                             comment: "text",
@@ -125,29 +144,104 @@ const Table = () => {
     const columns = React.useMemo<Column<Data>[]>(
         () => [
             {
-                Header: "Name",
-                accessor: "entityName",
+                Header: ({
+                    getToggleAllRowsExpandedProps,
+                    isAllRowsExpanded,
+                }) => (
+                    <span {...getToggleAllRowsExpandedProps()}>
+                        {isAllRowsExpanded ? "👇" : "👉"}
+                    </span>
+                ),
+                id: "expander",
+                Cell: ({ row }: any) => (
+                    <span {...row.getToggleRowExpandedProps()}>
+                        {row.isExpanded ? "👇" : "👉"}
+                    </span>
+                ),
+                width: 10,
             },
             {
+                id: "entityName",
+                Header: "Name",
+                accessor: "entityName",
+                width: 30,
+            },
+            {
+                id: "properties",
                 Header: "Propertyes",
                 accessor: "properties",
-                Cell: ({ value }) => <span>{value[0].propertyName}</span>,
+                width: 60,
+                Cell: ({ value }) => (
+                    <Flex gap={2}>
+                        {value.map((item: any, index: number) => (
+                            <Badge colorScheme={"blue"} key={index}>
+                                {item.propertyName}
+                            </Badge>
+                        ))}
+                    </Flex>
+                ),
             },
         ],
         []
     );
 
+    const renderRowSubComponent = React.useCallback(({ row }: any) => {
+        return (
+            <pre>
+                <Code width={"full"}>
+                    {JSON.stringify(row.values, null, 2)}
+                </Code>
+            </pre>
+        );
+    }, []);
+
+    return (
+        <Card overflowX={"auto"} width={1200} height={"fit-content"}>
+            <Flex
+                width={"100%"}
+                direction={"row"}
+                alignItems={"center"}
+                justifyContent="space-between"
+            >
+                <Flex>
+                    <Heading as="h2" size="sm">
+                        Dynaminc entities
+                    </Heading>
+                </Flex>
+                <Flex gap={3}>
+                    <IconButton
+                        aria-label="button"
+                        size="sm"
+                        variant={"ghost"}
+                        icon={<DragHandleIcon />}
+                    />
+                </Flex>
+            </Flex>
+            <Flex width={"100%"}>
+                <CustomTable
+                    data={data}
+                    columns={columns}
+                    renderRowSubComponent={renderRowSubComponent}
+                />
+            </Flex>
+        </Card>
+    );
+};
+
+export default DynamicEntities;
+
+const CustomTable = ({ columns, data, renderRowSubComponent }: any) => {
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
         rows,
         prepareRow,
-        state: { expanded },
-    } = useTable({ columns, data }, useSortBy);
+        visibleColumns,
+    } = useTable({ columns, data }, useSortBy, useExpanded);
 
     return (
-        <ChakraTable {...getTableProps()}>
+        <Table {...getTableProps()}>
             <Thead>
                 {headerGroups.map((headerGroup) => (
                     <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -176,16 +270,25 @@ const Table = () => {
                 {rows.map((row) => {
                     prepareRow(row);
                     return (
-                        <Tr {...row.getRowProps()}>
-                            {row.cells.map((cell) => (
-                                <Td {...cell.getCellProps()}>
-                                    {cell.render("Cell")}
-                                </Td>
-                            ))}
-                        </Tr>
+                        <>
+                            <Tr {...row.getRowProps()}>
+                                {row.cells.map((cell) => (
+                                    <Td {...cell.getCellProps()}>
+                                        {cell.render("Cell")}
+                                    </Td>
+                                ))}
+                            </Tr>
+                            {row.isExpanded ? (
+                                <Tr>
+                                    <Td colSpan={visibleColumns.length}>
+                                        {renderRowSubComponent({ row })}
+                                    </Td>
+                                </Tr>
+                            ) : null}
+                        </>
                     );
                 })}
             </Tbody>
-        </ChakraTable>
+        </Table>
     );
 };
