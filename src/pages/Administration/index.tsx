@@ -27,7 +27,7 @@ const Administration: React.FC = () => {
     return (
         <MotionWrapper data-testid="administration-page">
             <PageTitle />
-            <Flex gap={6} width="" flexWrap={"wrap"}>
+            <Flex gap={6} width={"100%"} flexWrap={"wrap"}>
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                     <DynamicEntities />
                 </ErrorBoundary>

@@ -1,50 +1,43 @@
-import {
-    DragHandleIcon,
-    TriangleDownIcon,
-    TriangleUpIcon,
-} from "@chakra-ui/icons";
+import React from "react";
 import {
     Flex,
     Heading,
     IconButton,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    chakra,
     Badge,
-    Code,
+    Button,
+    Icon,
 } from "@chakra-ui/react";
+import { BsDashSquareDotted, BsPlusSquareDotted } from "react-icons/bs";
+import { Column } from "react-table";
 
-import { useTable, useSortBy, Column, useExpanded } from "react-table";
-import React from "react";
 import Card from "../../common/Card";
+import ExpandTable from "./ExpandTable";
+import { DragHandleIcon } from "@chakra-ui/icons";
+
+export type DynamicEntityDBProperty = {
+    dataBaseTypeName: string;
+    length: number;
+    isNotNull: boolean;
+    isKey: boolean;
+    comment: string;
+};
+
+export type DataProperty = {
+    propertyName: string;
+    //TODO: union type
+    systemTypeName: string;
+    valueIndex: number;
+    dynamicEntityDataBaseProperty: DynamicEntityDBProperty;
+};
+
+export type DynamicEntitiesData = {
+    entityName: string;
+    properties: Array<DataProperty>;
+};
 
 const DynamicEntities = () => {
-    type DynamicEntityDBProperty = {
-        dataBaseTypeName: string;
-        length: number;
-        isNotNull: boolean;
-        isKey: boolean;
-        comment: string;
-    };
-
-    type DataProperty = {
-        propertyName: string;
-        systemTypeName: string; //union
-        valueIndex: number;
-        dynamicEntityDataBaseProperty: DynamicEntityDBProperty;
-    };
-
-    type Data = {
-        entityName: string;
-        properties: Array<DataProperty>;
-    };
-
-    const data: Data[] = React.useMemo(
-        (): Data[] => [
+    const data: DynamicEntitiesData[] = React.useMemo(
+        (): DynamicEntitiesData[] => [
             {
                 entityName: "People",
                 properties: [
@@ -54,8 +47,8 @@ const DynamicEntities = () => {
                         systemTypeName: "Int32",
                         dynamicEntityDataBaseProperty: {
                             comment: "text",
-                            dataBaseTypeName: "int",
-                            isKey: false,
+                            dataBaseTypeName: "Int",
+                            isKey: true,
                             isNotNull: true,
                             length: 25,
                         },
@@ -66,7 +59,7 @@ const DynamicEntities = () => {
                         systemTypeName: "String",
                         dynamicEntityDataBaseProperty: {
                             comment: "entity type",
-                            dataBaseTypeName: "string",
+                            dataBaseTypeName: "String",
                             isKey: false,
                             isNotNull: true,
                             length: 25,
@@ -78,7 +71,7 @@ const DynamicEntities = () => {
                         systemTypeName: "String",
                         dynamicEntityDataBaseProperty: {
                             comment: "entity type",
-                            dataBaseTypeName: "string",
+                            dataBaseTypeName: "String",
                             isKey: false,
                             isNotNull: true,
                             length: 25,
@@ -95,8 +88,8 @@ const DynamicEntities = () => {
                         systemTypeName: "Int32",
                         dynamicEntityDataBaseProperty: {
                             comment: "text",
-                            dataBaseTypeName: "int",
-                            isKey: false,
+                            dataBaseTypeName: "Int",
+                            isKey: true,
                             isNotNull: true,
                             length: 25,
                         },
@@ -112,9 +105,9 @@ const DynamicEntities = () => {
                         systemTypeName: "Int32",
                         dynamicEntityDataBaseProperty: {
                             comment: "text",
-                            dataBaseTypeName: "int",
+                            dataBaseTypeName: "Int",
                             isKey: false,
-                            isNotNull: true,
+                            isNotNull: false,
                             length: 25,
                         },
                     },
@@ -129,7 +122,7 @@ const DynamicEntities = () => {
                         systemTypeName: "Int32",
                         dynamicEntityDataBaseProperty: {
                             comment: "text",
-                            dataBaseTypeName: "int",
+                            dataBaseTypeName: "Int",
                             isKey: false,
                             isNotNull: true,
                             length: 25,
@@ -141,30 +134,29 @@ const DynamicEntities = () => {
         []
     );
 
-    const columns = React.useMemo<Column<Data>[]>(
+    const columns = React.useMemo<Column<DynamicEntitiesData>[]>(
         () => [
             {
-                Header: ({
-                    getToggleAllRowsExpandedProps,
-                    isAllRowsExpanded,
-                }) => (
-                    <span {...getToggleAllRowsExpandedProps()}>
-                        {isAllRowsExpanded ? "👇" : "👉"}
-                    </span>
-                ),
+                Header: () => null,
                 id: "expander",
                 Cell: ({ row }: any) => (
                     <span {...row.getToggleRowExpandedProps()}>
-                        {row.isExpanded ? "👇" : "👉"}
+                        {row.isExpanded ? (
+                            <Icon as={BsDashSquareDotted} />
+                        ) : (
+                            <Icon as={BsPlusSquareDotted} />
+                        )}
                     </span>
                 ),
-                width: 10,
+                width: 50,
+                minWidth: 50,
+                maxWidth: 50,
             },
             {
                 id: "entityName",
                 Header: "Name",
                 accessor: "entityName",
-                width: 30,
+                width: 200,
             },
             {
                 id: "properties",
@@ -185,18 +177,23 @@ const DynamicEntities = () => {
         []
     );
 
-    const renderRowSubComponent = React.useCallback(({ row }: any) => {
-        return (
-            <pre>
-                <Code width={"full"}>
-                    {JSON.stringify(row.values, null, 2)}
-                </Code>
-            </pre>
-        );
-    }, []);
+    const tableHooks = (hooks: any) => {
+        hooks.visibleColumns.push((column: Column<DynamicEntitiesData>) => [
+            ...columns,
+            {
+                id: "Actions",
+                Header: "Actions",
+                Cell: ({ value }: any) => <Button size={"xs"}>Edit</Button>,
+            },
+        ]);
+    };
 
     return (
-        <Card overflowX={"auto"} width={1200} height={"fit-content"}>
+        <Card
+            overflowX={"auto"}
+            width={{ base: "100%", md: "60%" }}
+            height={"fit-content"}
+        >
             <Flex
                 width={"100%"}
                 direction={"row"}
@@ -218,10 +215,10 @@ const DynamicEntities = () => {
                 </Flex>
             </Flex>
             <Flex width={"100%"}>
-                <CustomTable
+                <ExpandTable
                     data={data}
                     columns={columns}
-                    renderRowSubComponent={renderRowSubComponent}
+                    tableHooks={tableHooks}
                 />
             </Flex>
         </Card>
@@ -229,66 +226,3 @@ const DynamicEntities = () => {
 };
 
 export default DynamicEntities;
-
-const CustomTable = ({ columns, data, renderRowSubComponent }: any) => {
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-        visibleColumns,
-    } = useTable({ columns, data }, useSortBy, useExpanded);
-
-    return (
-        <Table {...getTableProps()}>
-            <Thead>
-                {headerGroups.map((headerGroup) => (
-                    <Tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                            <Th
-                                {...column.getHeaderProps(
-                                    column.getSortByToggleProps()
-                                )}
-                            >
-                                {column.render("Header")}
-                                <chakra.span pl="4">
-                                    {column.isSorted ? (
-                                        column.isSortedDesc ? (
-                                            <TriangleDownIcon aria-label="sorted descending" />
-                                        ) : (
-                                            <TriangleUpIcon aria-label="sorted ascending" />
-                                        )
-                                    ) : null}
-                                </chakra.span>
-                            </Th>
-                        ))}
-                    </Tr>
-                ))}
-            </Thead>
-            <Tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                    prepareRow(row);
-                    return (
-                        <>
-                            <Tr {...row.getRowProps()}>
-                                {row.cells.map((cell) => (
-                                    <Td {...cell.getCellProps()}>
-                                        {cell.render("Cell")}
-                                    </Td>
-                                ))}
-                            </Tr>
-                            {row.isExpanded ? (
-                                <Tr>
-                                    <Td colSpan={visibleColumns.length}>
-                                        {renderRowSubComponent({ row })}
-                                    </Td>
-                                </Tr>
-                            ) : null}
-                        </>
-                    );
-                })}
-            </Tbody>
-        </Table>
-    );
-};

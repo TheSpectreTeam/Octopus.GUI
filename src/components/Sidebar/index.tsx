@@ -13,6 +13,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
             bg={useColorModeValue("gray.50", "gray.800")}
         >
             <Box
+                zIndex={2}
                 borderTop={{ base: "1px solid", md: "none" }}
                 borderColor={{
                     base: useColorModeValue("gray.200", "gray.700"),
