@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
     Modal,
     ModalOverlay,
@@ -17,15 +17,25 @@ import BodyContent from "./BodyContent";
 
 import { DynamicEntitiesData } from "..";
 
+import { useAddDynamicEntities } from "../mutations";
+
 type Props = {
     isOpen: boolean;
     onClose: () => void;
 };
 
 const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
+    const mutation = useAddDynamicEntities();
+    useEffect(() => {
+        if (mutation.isSuccess) {
+            mutation.reset();
+            reset();
+        }
+    }, [mutation]);
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<DynamicEntitiesData>({
         defaultValues: {
@@ -70,11 +80,13 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
         onAlertClose();
     }, []);
 
-    const handleSendData=(data:DynamicEntitiesData)=>{
-        //TODO: replace to mock data send
-        console.log(data)
+    const handleSendData = (data: DynamicEntitiesData) => {
+        mutation.mutate(data);
+        reset();
+    };
+    if (mutation.isSuccess) {
+        onClose();
     }
-
     return (
         <>
             <Modal
@@ -99,7 +111,12 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                             />
                         </ModalBody>
                         <ModalFooter>
-                            <Button colorScheme="blue" type="submit" mr={3}>
+                            <Button
+                                colorScheme="blue"
+                                isLoading={mutation.isLoading}
+                                type="submit"
+                                mr={3}
+                            >
                                 Save
                             </Button>
                             <Button onClick={onModalClose} variant="ghost">

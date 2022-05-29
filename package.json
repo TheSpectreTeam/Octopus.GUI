@@ -18,19 +18,23 @@
     "scripts": {
         "test": "jest",
         "build": "cross-env NODE_ENV=production webpack --mode production",
-        "start:dev": "cross-env NODE_ENV=development webpack serve --open"
+        "start:dev": "cross-env NODE_ENV=development webpack serve --open",
+        "dev-server": "json-server --watch db.json --port 3004"
     },
     "dependencies": {
         "@chakra-ui/icons": "^2.0.0",
         "@chakra-ui/react": "2.0.2",
         "@emotion/react": "latest",
         "@emotion/styled": "latest",
+        "axios": "^0.27.2",
         "framer-motion": "latest",
+        "json-server": "^0.17.0",
         "react": "18.1.0",
         "react-dom": "18.1.0",
         "react-error-boundary": "^3.1.4",
         "react-hook-form": "^7.31.2",
         "react-icons": "^4.3.1",
+        "react-query": "^3.39.0",
         "react-router-dom": "^6.3.0",
         "react-table": "^7.8.0"
     },

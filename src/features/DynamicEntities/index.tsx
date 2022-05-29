@@ -11,6 +11,7 @@ import {
     MenuItem,
     MenuList,
     useDisclosure,
+    Skeleton as ChakraSkeleton,
 } from "@chakra-ui/react";
 import {
     BsDashSquareDotted,
@@ -18,11 +19,14 @@ import {
     BsThreeDots,
 } from "react-icons/bs";
 import { Column } from "react-table";
+import { AddIcon } from "@chakra-ui/icons";
 
 import Card from "../../common/Card";
 import ExpandTable from "./ExpandTable";
-import { AddIcon } from "@chakra-ui/icons";
+
 import ActionModal from "./Modal";
+import { useGetDynamicEntities } from "./querys";
+import Skeleton from "./Skeleton";
 
 export type DynamicEntityDBProperty = {
     dataBaseTypeName: string;
@@ -44,11 +48,14 @@ export type DynamicEntitiesData = {
     entityName: string;
     properties: Array<DataProperty>;
 };
+const SKELETON_ROWS = 5;
 
 const DynamicEntities = () => {
     const { isOpen: isOpenAction, onClose, onOpen } = useDisclosure();
 
-    const handleUserKeyPress = React.useCallback((event: any) => {
+    const { data, isLoading } = useGetDynamicEntities();
+
+    const handleUserKeyPress = React.useCallback((event: KeyboardEvent) => {
         const { code } = event;
         if (event.ctrlKey && code === "KeyA") {
             event.preventDefault();
@@ -63,102 +70,9 @@ const DynamicEntities = () => {
         };
     }, [handleUserKeyPress]);
 
-    const data: DynamicEntitiesData[] = React.useMemo(
-        (): DynamicEntitiesData[] => [
-            {
-                entityName: "People",
-                properties: [
-                    {
-                        propertyName: "ID",
-                        valueIndex: 0,
-                        systemTypeName: "Int32",
-                        dynamicEntityDataBaseProperty: {
-                            comment: "text",
-                            dataBaseTypeName: "Int",
-                            isKey: true,
-                            isNotNull: true,
-                            length: 25,
-                        },
-                    },
-                    {
-                        propertyName: "Type",
-                        valueIndex: 1,
-                        systemTypeName: "String",
-                        dynamicEntityDataBaseProperty: {
-                            comment: "entity type",
-                            dataBaseTypeName: "String",
-                            isKey: false,
-                            isNotNull: true,
-                            length: 25,
-                        },
-                    },
-                    {
-                        propertyName: "Sex",
-                        valueIndex: 2,
-                        systemTypeName: "String",
-                        dynamicEntityDataBaseProperty: {
-                            comment: "entity type",
-                            dataBaseTypeName: "String",
-                            isKey: false,
-                            isNotNull: true,
-                            length: 25,
-                        },
-                    },
-                ],
-            },
-            {
-                entityName: "Employee",
-                properties: [
-                    {
-                        propertyName: "ID",
-                        valueIndex: 3,
-                        systemTypeName: "Int32",
-                        dynamicEntityDataBaseProperty: {
-                            comment: "text",
-                            dataBaseTypeName: "Int",
-                            isKey: true,
-                            isNotNull: true,
-                            length: 25,
-                        },
-                    },
-                ],
-            },
-            {
-                entityName: "Tank",
-                properties: [
-                    {
-                        propertyName: "ID",
-                        valueIndex: 4,
-                        systemTypeName: "Int32",
-                        dynamicEntityDataBaseProperty: {
-                            comment: "text",
-                            dataBaseTypeName: "Int",
-                            isKey: false,
-                            isNotNull: false,
-                            length: 25,
-                        },
-                    },
-                ],
-            },
-            {
-                entityName: "Car",
-                properties: [
-                    {
-                        propertyName: "ID",
-                        valueIndex: 5,
-                        systemTypeName: "Int32",
-                        dynamicEntityDataBaseProperty: {
-                            comment: "text",
-                            dataBaseTypeName: "Int",
-                            isKey: false,
-                            isNotNull: true,
-                            length: 25,
-                        },
-                    },
-                ],
-            },
-        ],
-        []
+    const tableData: DynamicEntitiesData[] = React.useMemo(
+        (): DynamicEntitiesData[] => data,
+        [data]
     );
 
     const columns = React.useMemo<Column<DynamicEntitiesData>[]>(
@@ -229,9 +143,11 @@ const DynamicEntities = () => {
                     justifyContent="space-between"
                 >
                     <Flex>
-                        <Heading as="h2" size="sm">
-                            Dynaminc entities
-                        </Heading>
+                        <ChakraSkeleton isLoaded={!isLoading}>
+                            <Heading as="h2" size="sm">
+                                Dynaminc entities
+                            </Heading>
+                        </ChakraSkeleton>
                     </Flex>
                     <Flex gap={3}>
                         <Menu>
@@ -255,11 +171,18 @@ const DynamicEntities = () => {
                     </Flex>
                 </Flex>
                 <Flex width={"100%"}>
-                    <ExpandTable
-                        data={data}
-                        columns={columns}
-                        tableHooks={tableHooks}
-                    />
+                    {isLoading ? (
+                        <Skeleton
+                            rows={SKELETON_ROWS}
+                            columns={columns.length + 1}
+                        />
+                    ) : (
+                        <ExpandTable
+                            data={tableData}
+                            columns={columns}
+                            tableHooks={tableHooks}
+                        />
+                    )}
                 </Flex>
             </Card>
             <ActionModal isOpen={isOpenAction} onClose={onClose} />

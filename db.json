@@ -1,0 +1,170 @@
+{
+  "de": [
+    {
+      "id": 0,
+      "entityName": "People",
+      "properties": [
+        {
+          "propertyName": "ID",
+          "valueIndex": 1,
+          "systemTypeName": "Int32",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "text",
+            "dataBaseTypeName": "Int",
+            "isKey": true,
+            "isNotNull": false,
+            "length": 25
+          }
+        },
+        {
+          "propertyName": "Sex",
+          "valueIndex": 1,
+          "systemTypeName": "String",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "text",
+            "dataBaseTypeName": "String",
+            "isKey": false,
+            "isNotNull": false,
+            "length": 25
+          }
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "entityName": "Car",
+      "properties": [
+        {
+          "propertyName": "ID",
+          "valueIndex": 2,
+          "systemTypeName": "Int32",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "text",
+            "dataBaseTypeName": "Int",
+            "isKey": false,
+            "isNotNull": false,
+            "length": 25
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "entityName": "Job",
+      "properties": [
+        {
+          "propertyName": "ID",
+          "valueIndex": 2,
+          "systemTypeName": "Int32",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "text",
+            "dataBaseTypeName": "Int",
+            "isKey": false,
+            "isNotNull": false,
+            "length": 25
+          }
+        }
+      ]
+    },
+    {
+      "properties": [
+        {
+          "propertyName": "id",
+          "systemTypeName": "System.Int32",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "",
+            "dataBaseTypeName": "Int32",
+            "isKey": true,
+            "isNotNull": true,
+            "length": 25
+          }
+        }
+      ],
+      "entityName": "Test",
+      "id": 3
+    },
+    {
+      "properties": [
+        {
+          "propertyName": "ID",
+          "systemTypeName": "System.Int32",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "",
+            "dataBaseTypeName": "Int32",
+            "isKey": true,
+            "isNotNull": true,
+            "length": 25
+          }
+        },
+        {
+          "propertyName": "Type",
+          "systemTypeName": "System.Int32",
+          "dynamicEntityDataBaseProperty": {
+            "isKey": false,
+            "isNotNull": true,
+            "comment": "Tasdasd",
+            "dataBaseTypeName": "String",
+            "length": 20
+          }
+        }
+      ],
+      "entityName": "People2",
+      "id": 4
+    },
+    {
+      "properties": [
+        {
+          "propertyName": "ads",
+          "systemTypeName": "",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "",
+            "dataBaseTypeName": "Int",
+            "isKey": true,
+            "isNotNull": true,
+            "length": 25
+          }
+        }
+      ],
+      "entityName": "werwe",
+      "id": 5
+    },
+    {
+      "properties": [
+        {
+          "propertyName": "asdasd",
+          "systemTypeName": "System.Int32",
+          "dynamicEntityDataBaseProperty": {
+            "comment": "",
+            "dataBaseTypeName": "Int32",
+            "isKey": true,
+            "isNotNull": true,
+            "length": 25
+          }
+        },
+        {
+          "propertyName": "asdasdasd",
+          "systemTypeName": "System.Int32",
+          "dynamicEntityDataBaseProperty": {
+            "isKey": true,
+            "isNotNull": true,
+            "comment": "",
+            "dataBaseTypeName": "Int32",
+            "length": 20
+          }
+        }
+      ],
+      "entityName": "asdasd",
+      "id": 6
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
