@@ -6,13 +6,23 @@ import {
     Badge,
     Button,
     Icon,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    useDisclosure,
 } from "@chakra-ui/react";
-import { BsDashSquareDotted, BsPlusSquareDotted } from "react-icons/bs";
+import {
+    BsDashSquareDotted,
+    BsPlusSquareDotted,
+    BsThreeDots,
+} from "react-icons/bs";
 import { Column } from "react-table";
 
 import Card from "../../common/Card";
 import ExpandTable from "./ExpandTable";
-import { DragHandleIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
+import ActionModal from "./Modal";
 
 export type DynamicEntityDBProperty = {
     dataBaseTypeName: string;
@@ -36,6 +46,23 @@ export type DynamicEntitiesData = {
 };
 
 const DynamicEntities = () => {
+    const { isOpen: isOpenAction, onClose, onOpen } = useDisclosure();
+
+    const handleUserKeyPress = React.useCallback((event: any) => {
+        const { code } = event;
+        if (event.ctrlKey && code === "KeyA") {
+            event.preventDefault();
+            onOpen();
+        }
+    }, []);
+
+    React.useEffect(() => {
+        window.addEventListener("keydown", handleUserKeyPress);
+        return () => {
+            window.removeEventListener("keydown", handleUserKeyPress);
+        };
+    }, [handleUserKeyPress]);
+
     const data: DynamicEntitiesData[] = React.useMemo(
         (): DynamicEntitiesData[] => [
             {
@@ -177,51 +204,66 @@ const DynamicEntities = () => {
         []
     );
 
-    const tableHooks = (hooks: any) => {
+    const tableHooks = React.useCallback((hooks: any) => {
         hooks.visibleColumns.push((column: Column<DynamicEntitiesData>) => [
             ...columns,
             {
                 id: "Actions",
                 Header: "Actions",
-                Cell: ({ value }: any) => <Button size={"xs"}>Edit</Button>,
+                Cell: () => <Button size={"xs"}>Edit</Button>,
             },
         ]);
-    };
+    }, []);
 
     return (
-        <Card
-            overflowX={"auto"}
-            width={{ base: "100%", md: "60%" }}
-            height={"fit-content"}
-        >
-            <Flex
-                width={"100%"}
-                direction={"row"}
-                alignItems={"center"}
-                justifyContent="space-between"
+        <>
+            <Card
+                overflowX={"auto"}
+                width={{ base: "100%", md: "60%" }}
+                height={"fit-content"}
             >
-                <Flex>
-                    <Heading as="h2" size="sm">
-                        Dynaminc entities
-                    </Heading>
+                <Flex
+                    width={"100%"}
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent="space-between"
+                >
+                    <Flex>
+                        <Heading as="h2" size="sm">
+                            Dynaminc entities
+                        </Heading>
+                    </Flex>
+                    <Flex gap={3}>
+                        <Menu>
+                            <MenuButton
+                                as={IconButton}
+                                aria-label="Options"
+                                icon={<BsThreeDots />}
+                                size="sm"
+                                variant={"ghost"}
+                            />
+                            <MenuList>
+                                <MenuItem
+                                    icon={<AddIcon />}
+                                    onClick={onOpen}
+                                    command="CTRL+A"
+                                >
+                                    New Entity
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </Flex>
                 </Flex>
-                <Flex gap={3}>
-                    <IconButton
-                        aria-label="button"
-                        size="sm"
-                        variant={"ghost"}
-                        icon={<DragHandleIcon />}
+                <Flex width={"100%"}>
+                    <ExpandTable
+                        data={data}
+                        columns={columns}
+                        tableHooks={tableHooks}
                     />
                 </Flex>
-            </Flex>
-            <Flex width={"100%"}>
-                <ExpandTable
-                    data={data}
-                    columns={columns}
-                    tableHooks={tableHooks}
-                />
-            </Flex>
-        </Card>
+            </Card>
+            <ActionModal isOpen={isOpenAction} onClose={onClose} />
+        </>
     );
 };
 

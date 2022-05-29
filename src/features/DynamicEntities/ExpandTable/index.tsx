@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
     chakra,
@@ -16,7 +16,7 @@ import { useTable, useSortBy, useExpanded, Column } from "react-table";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { BsCheckLg, BsXLg } from "react-icons/bs";
-import {type DynamicEntitiesData } from "..";
+import { type DynamicEntitiesData } from "..";
 
 const TdMotion = motion(chakra.td);
 const TrMotion = motion(chakra.tr);
@@ -140,7 +140,11 @@ const ExpandTable: React.FC<ExpandTableProps> = ({
                                                     }
                                                     {...animateProps}
                                                 >
-                                                    {<NestedTable row={row} />}
+                                                    {
+                                                        <MemoNestedTable
+                                                            row={row}
+                                                        />
+                                                    }
                                                 </MotionComponent>
                                             </MotionComponent>
                                         </AnimatePresence>
@@ -155,7 +159,7 @@ const ExpandTable: React.FC<ExpandTableProps> = ({
     );
 };
 
-export default ExpandTable;
+export default memo(ExpandTable);
 
 const NestedTable = ({ row }: any) => {
     const data = React.useMemo(
@@ -258,3 +262,5 @@ const NestedTable = ({ row }: any) => {
         </Table>
     );
 };
+
+const MemoNestedTable = memo(NestedTable);

@@ -1,6 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import Card from "./components/Card";
+import Modal from "./components/Modal";
 
 const config = {
     initialColorMode: "dark",
@@ -16,6 +17,7 @@ const colors = {
 
 const components = {
     Card,
+    Modal,
 };
 
 const styles = {
