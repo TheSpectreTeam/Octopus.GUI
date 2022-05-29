@@ -3,7 +3,6 @@ import {
     Flex,
     Heading,
     IconButton,
-    Badge,
     Button,
     Icon,
     Menu,
@@ -12,9 +11,11 @@ import {
     MenuList,
     useDisclosure,
     Skeleton as ChakraSkeleton,
+    Tag,
 } from "@chakra-ui/react";
 import {
     BsDashSquareDotted,
+    BsFillTrashFill,
     BsPlusSquareDotted,
     BsThreeDots,
 } from "react-icons/bs";
@@ -27,6 +28,7 @@ import ExpandTable from "./ExpandTable";
 import ActionModal from "./Modal";
 import { useGetDynamicEntities } from "./querys";
 import Skeleton from "./Skeleton";
+import { useDelete } from "./mutations";
 
 export type DynamicEntityDBProperty = {
     dataBaseTypeName: string;
@@ -52,9 +54,11 @@ const SKELETON_ROWS = 5;
 
 const DynamicEntities = () => {
     const { isOpen: isOpenAction, onClose, onOpen } = useDisclosure();
+    const [isEdit, setIsEdit] = React.useState<boolean>(false);
+    const [selectedData, setSelectedData] = React.useState(null);
 
     const { data, isLoading } = useGetDynamicEntities();
-
+    const mutation = useDelete();
     const handleUserKeyPress = React.useCallback((event: KeyboardEvent) => {
         const { code } = event;
         if (event.ctrlKey && code === "KeyA") {
@@ -107,9 +111,9 @@ const DynamicEntities = () => {
                 Cell: ({ value }) => (
                     <Flex gap={2}>
                         {value.map((item: any, index: number) => (
-                            <Badge colorScheme={"blue"} key={index}>
+                            <Tag colorScheme={"blue"} key={index}>
                                 {item.propertyName}
-                            </Badge>
+                            </Tag>
                         ))}
                     </Flex>
                 ),
@@ -117,14 +121,29 @@ const DynamicEntities = () => {
         ],
         []
     );
-
+   
     const tableHooks = React.useCallback((hooks: any) => {
         hooks.visibleColumns.push((column: Column<DynamicEntitiesData>) => [
             ...columns,
             {
                 id: "Actions",
                 Header: "Actions",
-                Cell: () => <Button size={"xs"}>Edit</Button>,
+                Cell: ({ row }: any) => (
+                    <Flex gap={3}>
+                        <Button
+                            onClick={()=>console.log(row.original)}
+                        >
+                            Edit
+                        </Button>
+                        <IconButton
+                            aria-label="delete-entity"
+                            icon={<BsFillTrashFill />}
+                            onClick={() => {
+                                mutation.mutate(row?.original?.id);
+                            }}
+                        />
+                    </Flex>
+                ),
             },
         ]);
     }, []);

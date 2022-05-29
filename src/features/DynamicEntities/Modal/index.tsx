@@ -17,7 +17,7 @@ import BodyContent from "./BodyContent";
 
 import { DynamicEntitiesData } from "..";
 
-import { useAddDynamicEntities } from "../mutations";
+import { useAdd } from "../mutations";
 
 type Props = {
     isOpen: boolean;
@@ -25,7 +25,7 @@ type Props = {
 };
 
 const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
-    const mutation = useAddDynamicEntities();
+    const mutation = useAdd();
     useEffect(() => {
         if (mutation.isSuccess) {
             mutation.reset();
