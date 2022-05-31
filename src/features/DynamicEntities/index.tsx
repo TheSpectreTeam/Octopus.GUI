@@ -3,7 +3,6 @@ import {
     Flex,
     Heading,
     IconButton,
-    Button,
     Icon,
     Menu,
     MenuButton,
@@ -12,10 +11,10 @@ import {
     useDisclosure,
     Skeleton as ChakraSkeleton,
     Tag,
+    ButtonGroup,
 } from "@chakra-ui/react";
 import {
     BsDashSquareDotted,
-    BsFillTrashFill,
     BsPlusSquareDotted,
     BsThreeDots,
 } from "react-icons/bs";
@@ -29,6 +28,9 @@ import ActionModal from "./Modal";
 import { useGetDynamicEntities } from "./querys";
 import Skeleton from "./Skeleton";
 import { useDelete } from "./mutations";
+import ConfirmPopover from "./ConfirmPopover";
+import { EditIcon, TrashIcon } from "../../assets";
+import HoverIcon from "../../common/HoverIcon";
 
 export type DynamicEntityDBProperty = {
     dataBaseTypeName: string;
@@ -50,15 +52,16 @@ export type DynamicEntitiesData = {
     entityName: string;
     properties: Array<DataProperty>;
 };
+
 const SKELETON_ROWS = 5;
 
 const DynamicEntities = () => {
     const { isOpen: isOpenAction, onClose, onOpen } = useDisclosure();
-    const [isEdit, setIsEdit] = React.useState<boolean>(false);
-    const [selectedData, setSelectedData] = React.useState(null);
 
     const { data, isLoading } = useGetDynamicEntities();
+
     const mutation = useDelete();
+
     const handleUserKeyPress = React.useCallback((event: KeyboardEvent) => {
         const { code } = event;
         if (event.ctrlKey && code === "KeyA") {
@@ -74,8 +77,15 @@ const DynamicEntities = () => {
         };
     }, [handleUserKeyPress]);
 
+    const handleDelete = React.useCallback(
+        (id: any) => {
+            mutation.mutate(id);
+        },
+        [mutation]
+    );
+
     const tableData: DynamicEntitiesData[] = React.useMemo(
-        (): DynamicEntitiesData[] => data,
+        (): DynamicEntitiesData[] => data ?? null,
         [data]
     );
 
@@ -121,7 +131,7 @@ const DynamicEntities = () => {
         ],
         []
     );
-   
+    
     const tableHooks = React.useCallback((hooks: any) => {
         hooks.visibleColumns.push((column: Column<DynamicEntitiesData>) => [
             ...columns,
@@ -129,20 +139,23 @@ const DynamicEntities = () => {
                 id: "Actions",
                 Header: "Actions",
                 Cell: ({ row }: any) => (
-                    <Flex gap={3}>
-                        <Button
-                            onClick={()=>console.log(row.original)}
-                        >
-                            Edit
-                        </Button>
+                    <ButtonGroup gap={3}>
                         <IconButton
-                            aria-label="delete-entity"
-                            icon={<BsFillTrashFill />}
-                            onClick={() => {
-                                mutation.mutate(row?.original?.id);
-                            }}
+                            variant="ghost"
+                            aria-label="edit-entity"
+                            className="hovered-icon-btn"
+                            icon={
+                                <HoverIcon
+                                    icon={EditIcon}
+                                    hoverColor="blue.400"
+                                />
+                            }
                         />
-                    </Flex>
+                        <ConfirmPopover
+                            onConfirm={() => handleDelete(row?.original?.id)}
+                            targetIcon={TrashIcon}
+                        />
+                    </ButtonGroup>
                 ),
             },
         ]);

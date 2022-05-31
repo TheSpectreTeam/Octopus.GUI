@@ -62,7 +62,7 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
     });
 
     const backButtonRef = useRef(null);
-
+    const initialRef = useRef(null)
     const {
         isOpen: isAlertOpen,
         onOpen: onAlertOpen,
@@ -90,6 +90,7 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
     return (
         <>
             <Modal
+                initialFocusRef={initialRef}
                 scrollBehavior="outside"
                 closeOnOverlayClick={false}
                 blockScrollOnMount={false}
@@ -103,6 +104,7 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         <ModalCloseButton />
                         <ModalBody>
                             <BodyContent
+                                ref = {initialRef}
                                 control={control}
                                 errors={errors}
                                 remove={remove}
