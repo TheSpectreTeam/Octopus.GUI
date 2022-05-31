@@ -18,7 +18,7 @@ import { Control, Controller, FieldArrayWithId } from "react-hook-form";
 import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
 import { IoBanSharp } from "react-icons/io5";
 
-import { DynamicEntitiesData } from "../..";
+import { DynamicEntitiesData } from "../../..";
 import ConditionIcon from "../ConditionIcon";
 import ControllField from "../ControllField";
 

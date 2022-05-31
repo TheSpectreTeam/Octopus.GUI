@@ -15,9 +15,9 @@ import { useFieldArray, useForm } from "react-hook-form";
 import AlertCloseDialog from "../AlertCloseDialog";
 import BodyContent from "./BodyContent";
 
-import { DynamicEntitiesData } from "..";
+import { DynamicEntitiesData } from "../..";
 
-import { useAdd } from "../mutations";
+import { useAdd } from "../../mutations";
 
 type Props = {
     isOpen: boolean;
@@ -26,12 +26,14 @@ type Props = {
 
 const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const mutation = useAdd();
+    
     useEffect(() => {
         if (mutation.isSuccess) {
             mutation.reset();
             reset();
         }
     }, [mutation]);
+
     const {
         control,
         handleSubmit,

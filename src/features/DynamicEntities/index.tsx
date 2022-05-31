@@ -22,15 +22,18 @@ import { Column } from "react-table";
 import { AddIcon } from "@chakra-ui/icons";
 
 import Card from "../../common/Card";
-import ExpandTable from "./ExpandTable";
-
-import ActionModal from "./Modal";
-import { useGetDynamicEntities } from "./querys";
-import Skeleton from "./Skeleton";
-import { useDelete } from "./mutations";
-import ConfirmPopover from "./ConfirmPopover";
-import { EditIcon, TrashIcon } from "../../assets";
 import HoverIcon from "../../common/HoverIcon";
+
+import { EditIcon, TrashIcon } from "../../assets";
+
+import {
+    ActionModal,
+    Skeleton,
+    ConfirmPopover,
+    ExpandTable,
+} from "./components";
+import { useGetDynamicEntities } from "./querys";
+import { useDelete } from "./mutations";
 
 export type DynamicEntityDBProperty = {
     dataBaseTypeName: string;
@@ -131,7 +134,7 @@ const DynamicEntities = () => {
         ],
         []
     );
-    
+
     const tableHooks = React.useCallback((hooks: any) => {
         hooks.visibleColumns.push((column: Column<DynamicEntitiesData>) => [
             ...columns,

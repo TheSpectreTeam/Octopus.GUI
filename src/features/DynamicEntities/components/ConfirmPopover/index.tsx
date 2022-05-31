@@ -17,7 +17,7 @@ import {
     type IconProps,
 } from "@chakra-ui/react";
 import React from "react";
-import HoverIcon from "../../../common/HoverIcon";
+import HoverIcon from "../../../../common/HoverIcon";
 
 type ConfirmPopoverProps = {
     onConfirm: ()=>void;

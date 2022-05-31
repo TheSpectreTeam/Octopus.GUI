@@ -2,10 +2,7 @@ import React, { memo } from "react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
     chakra,
-    Code,
-    Icon,
     Table,
-    Tbody,
     Td,
     Th,
     Thead,
@@ -15,8 +12,8 @@ import {
 import { useTable, useSortBy, useExpanded, Column } from "react-table";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { BsCheckLg, BsXLg } from "react-icons/bs";
-import { type DynamicEntitiesData } from "..";
+import { type DynamicEntitiesData } from "../../";
+import NestedTable from "./NestedTable";
 
 const TdMotion = motion(chakra.td);
 const TrMotion = motion(chakra.tr);
@@ -140,11 +137,7 @@ const ExpandTable: React.FC<ExpandTableProps> = ({
                                                     }
                                                     {...animateProps}
                                                 >
-                                                    {
-                                                        <MemoNestedTable
-                                                            row={row}
-                                                        />
-                                                    }
+                                                    {<NestedTable row={row} />}
                                                 </MotionComponent>
                                             </MotionComponent>
                                         </AnimatePresence>
@@ -160,107 +153,3 @@ const ExpandTable: React.FC<ExpandTableProps> = ({
 };
 
 export default memo(ExpandTable);
-
-const NestedTable = ({ row }: any) => {
-    const data = React.useMemo(
-        () => row.values.properties.map((item: any) => item),
-
-        []
-    );
-    const columns = React.useMemo<Column<any>[]>(
-        () => [
-            { Header: "Index", accessor: "valueIndex" },
-            { Header: "Name", accessor: "propertyName" },
-            { Header: "System Type", accessor: "systemTypeName" },
-
-            {
-                Header: "DB Type",
-                accessor: "dynamicEntityDataBaseProperty.dataBaseTypeName",
-            },
-            {
-                Header: "Key",
-                accessor: "dynamicEntityDataBaseProperty.isKey",
-                Cell: ({ value }) => {
-                    return (
-                        <Icon
-                            as={value ? BsCheckLg : BsXLg}
-                            color={value ? "green.400" : "red.400"}
-                        />
-                    );
-                },
-            },
-            {
-                Header: "Not null",
-                accessor: "dynamicEntityDataBaseProperty.isNotNull",
-                Cell: ({ value }) => {
-                    return (
-                        <Icon
-                            as={value ? BsCheckLg : BsXLg}
-                            color={value ? "green.400" : "red.400"}
-                        />
-                    );
-                },
-            },
-            {
-                Header: "Length",
-                accessor: "dynamicEntityDataBaseProperty.length",
-            },
-            {
-                Header: "Comment",
-                accessor: "dynamicEntityDataBaseProperty.comment",
-                Cell: ({ value }) => <Code>{value}</Code>,
-            },
-        ],
-        []
-    );
-
-    const numericHeaders = ["Index", "Length"];
-
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable({ columns, data }, useSortBy, useExpanded);
-
-    return (
-        <Table {...getTableProps()} paddingLeft={90} width="100%">
-            <Thead>
-                {headerGroups.map((headerGroup) => (
-                    <Tr
-                        borderBottom={"1px dashed red"}
-                        {...headerGroup.getHeaderGroupProps()}
-                    >
-                        {headerGroup.headers.map((column) => (
-                            <Th
-                                isNumeric={numericHeaders.includes(
-                                    column.Header as string
-                                )}
-                                borderBottom={"1px dashed red"}
-                                {...column.getHeaderProps()}
-                            >
-                                {column.render("Header")}
-                            </Th>
-                        ))}
-                    </Tr>
-                ))}
-            </Thead>
-            <Tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                    prepareRow(row);
-                    return (
-                        <Tr {...row.getRowProps()}>
-                            {row.cells.map((cell) => (
-                                <Td
-                                    isNumeric={typeof cell.value === "number"}
-                                    borderBottom={"1px dashed red"}
-                                    {...cell.getCellProps()}
-                                >
-                                    {cell.render("Cell")}
-                                </Td>
-                            ))}
-                        </Tr>
-                    );
-                })}
-            </Tbody>
-        </Table>
-    );
-};
-
-const MemoNestedTable = memo(NestedTable);
