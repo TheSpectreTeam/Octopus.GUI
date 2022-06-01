@@ -15,48 +15,38 @@ import {
 } from "@chakra-ui/react";
 
 import { BsCheckLg, BsFolder } from "react-icons/bs";
-import Card from "../../common/Card";
+import Card, { CardContent, CardHeader } from "../../common/Card";
 
 const Conductor = () => {
     return (
         <Card width={600}>
-            <Flex
-                width={"full"}
-                as={Box}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-            >
-                <Flex direction={"column"}>
-                    <Heading as="h2" size="md">
-                        Conductor
-                    </Heading>
-                    <Text color="gray.500">Entity Description</Text>
-                </Flex>
-                <Flex>
-                    <IconButton
-                        aria-label="button"
-                        size="sm"
-                        variant={"ghost"}
-                        icon={<DragHandleIcon />}
-                    />
-                </Flex>
-            </Flex>
-            <ConductorInput
-                ariaLabel="input-folder"
-                icon={<BsFolder />}
-                label="Input folder"
-                inputType="text"
-            />
-            <ConductorInput
-                ariaLabel="output-folder"
-                label="Output folder"
-                icon={<BsFolder />}
-            />
-            <ConductorInput
-                ariaLabel="model-name"
-                label="Model name"
-                icon={<Icon as={BsCheckLg} color="green.400" />}
-            />
+            <CardHeader title="Conductor">
+                <IconButton
+                    aria-label="button"
+                    size="sm"
+                    variant={"ghost"}
+                    icon={<DragHandleIcon />}
+                />
+            </CardHeader>
+
+            <CardContent direction="column" gap={3}>
+                <ConductorInput
+                    ariaLabel="input-folder"
+                    icon={<BsFolder />}
+                    label="Input folder"
+                    inputType="text"
+                />
+                <ConductorInput
+                    ariaLabel="output-folder"
+                    label="Output folder"
+                    icon={<BsFolder />}
+                />
+                <ConductorInput
+                    ariaLabel="model-name"
+                    label="Model name"
+                    icon={<Icon as={BsCheckLg} color="green.400" />}
+                />
+            </CardContent>
             <Flex width="100%" justifyContent={"flex-end"}>
                 <HStack>
                     <Button variant={"solid"} colorScheme="blue">

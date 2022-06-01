@@ -1,24 +1,22 @@
 import React from "react";
 
-import { Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import PageTitle from "../../layouts/PageTitle";
 import MotionWrapper from "../../components/MotionWrapper";
 import Conductor from "../../features/Conductor";
 import DynamicEntities from "../../features/DynamicEntities";
-import Card from "../../common/Card";
+import Card, { CardContent, CardHeader } from "../../common/Card";
 
 function ErrorFallback({ error }: any) {
     return (
         <Card variant={"flat"} role="alert">
-            <Heading size="sm" as="h5">
-                Something went wrong:
-            </Heading>
-            <Flex>
+            <CardHeader title="Something went wrong:" />
+            <CardContent>
                 <Text color={"red.400"}>
-                    {JSON.stringify(error.message, null, 2)}
+                    <pre>{JSON.stringify(error.message, null, 2)}</pre>
                 </Text>
-            </Flex>
+            </CardContent>
         </Card>
     );
 }

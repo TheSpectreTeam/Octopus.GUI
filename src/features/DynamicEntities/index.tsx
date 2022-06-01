@@ -21,7 +21,11 @@ import {
 import { Column } from "react-table";
 import { AddIcon } from "@chakra-ui/icons";
 
-import Card from "../../common/Card";
+import Card, {
+    CardContent,
+    CardHeader,
+    CardHeaderActions,
+} from "../../common/Card";
 import HoverIcon from "../../common/HoverIcon";
 
 import { EditIcon, TrashIcon } from "../../assets";
@@ -171,20 +175,8 @@ const DynamicEntities = () => {
                 width={{ base: "100%", md: "60%" }}
                 height={"fit-content"}
             >
-                <Flex
-                    width={"100%"}
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent="space-between"
-                >
-                    <Flex>
-                        <ChakraSkeleton isLoaded={!isLoading}>
-                            <Heading as="h2" size="sm">
-                                Dynaminc entities
-                            </Heading>
-                        </ChakraSkeleton>
-                    </Flex>
-                    <Flex gap={3}>
+                <CardHeader isLoaded={true} title="Dynamic Entities">
+                    <CardHeaderActions>
                         <Menu>
                             <MenuButton
                                 as={IconButton}
@@ -203,9 +195,9 @@ const DynamicEntities = () => {
                                 </MenuItem>
                             </MenuList>
                         </Menu>
-                    </Flex>
-                </Flex>
-                <Flex width={"100%"}>
+                    </CardHeaderActions>
+                </CardHeader>
+                <CardContent>
                     {isLoading ? (
                         <Skeleton
                             rows={SKELETON_ROWS}
@@ -218,7 +210,7 @@ const DynamicEntities = () => {
                             tableHooks={tableHooks}
                         />
                     )}
-                </Flex>
+                </CardContent>
             </Card>
             <ActionModal isOpen={isOpenAction} onClose={onClose} />
         </>
