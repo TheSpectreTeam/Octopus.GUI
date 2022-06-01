@@ -1,33 +1,26 @@
 import React, { memo } from "react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
-import {
-    chakra,
-    Table,
-    Td,
-    Th,
-    Thead,
-    Tr,
-} from "@chakra-ui/react";
+import { chakra, Table, Td, Th, Thead, Tr } from "@chakra-ui/react";
 
 import { useTable, useSortBy, useExpanded, Column } from "react-table";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { type DynamicEntitiesData } from "../../";
 import NestedTable from "./NestedTable";
-
-const TdMotion = motion(chakra.td);
-const TrMotion = motion(chakra.tr);
-const ThMotion = motion(chakra.th);
-const TheadMotion = motion(chakra.thead);
-const TbodyMotion = motion(chakra.tbody);
-const MotionComponent = motion(chakra.div);
+import {
+    MotionComponent,
+    TbodyMotion,
+    TdMotion,
+    TheadMotion,
+    ThMotion,
+    TrMotion,
+} from "./helpers";
 
 type ExpandTableProps = {
     columns: Column<DynamicEntitiesData>[];
     data: DynamicEntitiesData[];
     tableHooks: any;
 };
-
 const ExpandTable: React.FC<ExpandTableProps> = ({
     columns,
     data,
@@ -62,7 +55,6 @@ const ExpandTable: React.FC<ExpandTableProps> = ({
         }),
         []
     );
-
     return (
         <AnimatePresence exitBeforeEnter>
             <Table as={motion.table} {...getTableProps()} {...animateProps}>

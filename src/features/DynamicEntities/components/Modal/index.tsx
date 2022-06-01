@@ -29,6 +29,7 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
     
     useEffect(() => {
         if (mutation.isSuccess) {
+            onClose()
             mutation.reset();
             reset();
         }
@@ -86,9 +87,7 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
         mutation.mutate(data);
         reset();
     };
-    if (mutation.isSuccess) {
-        onClose();
-    }
+   
     return (
         <>
             <Modal

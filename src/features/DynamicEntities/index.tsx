@@ -1,23 +1,13 @@
 import React from "react";
 import {
-    Flex,
-    Heading,
     IconButton,
-    Icon,
     Menu,
     MenuButton,
     MenuItem,
     MenuList,
     useDisclosure,
-    Skeleton as ChakraSkeleton,
-    Tag,
-    ButtonGroup,
 } from "@chakra-ui/react";
-import {
-    BsDashSquareDotted,
-    BsPlusSquareDotted,
-    BsThreeDots,
-} from "react-icons/bs";
+import { BsThreeDots } from "react-icons/bs";
 import { Column } from "react-table";
 import { AddIcon } from "@chakra-ui/icons";
 
@@ -26,18 +16,16 @@ import Card, {
     CardHeader,
     CardHeaderActions,
 } from "../../common/Card";
-import HoverIcon from "../../common/HoverIcon";
 
-import { EditIcon, TrashIcon } from "../../assets";
-
-import {
-    ActionModal,
-    Skeleton,
-    ConfirmPopover,
-    ExpandTable,
-} from "./components";
+import { ActionModal, Skeleton, ExpandTable } from "./components";
 import { useGetDynamicEntities } from "./querys";
 import { useDelete } from "./mutations";
+import {
+    renderActionButtons,
+    renderCell,
+    renderExpandIcon,
+} from "./components/ExpandTable/helpers";
+import { useKeyEvent } from "../../utils/hooks";
 
 export type DynamicEntityDBProperty = {
     dataBaseTypeName: string;
@@ -61,6 +49,9 @@ export type DynamicEntitiesData = {
 };
 
 const SKELETON_ROWS = 5;
+const DynamicEntitiesContext = React.createContext({});
+DynamicEntitiesContext.displayName = "DynamicEntitiesCntext";
+const DynamicEntitiesProvider = DynamicEntitiesContext.Provider;
 
 const DynamicEntities = () => {
     const { isOpen: isOpenAction, onClose, onOpen } = useDisclosure();
@@ -68,21 +59,11 @@ const DynamicEntities = () => {
     const { data, isLoading } = useGetDynamicEntities();
 
     const mutation = useDelete();
-
-    const handleUserKeyPress = React.useCallback((event: KeyboardEvent) => {
-        const { code } = event;
-        if (event.ctrlKey && code === "KeyA") {
-            event.preventDefault();
-            onOpen();
-        }
-    }, []);
-
-    React.useEffect(() => {
-        window.addEventListener("keydown", handleUserKeyPress);
-        return () => {
-            window.removeEventListener("keydown", handleUserKeyPress);
-        };
-    }, [handleUserKeyPress]);
+    useKeyEvent({
+        keyCode: "KeyA",
+        pressedKey: "ctrlKey",
+        fn: () => onOpen(),
+    });
 
     const handleDelete = React.useCallback(
         (id: any) => {
@@ -101,15 +82,7 @@ const DynamicEntities = () => {
             {
                 Header: () => null,
                 id: "expander",
-                Cell: ({ row }: any) => (
-                    <span {...row.getToggleRowExpandedProps()}>
-                        {row.isExpanded ? (
-                            <Icon as={BsDashSquareDotted} />
-                        ) : (
-                            <Icon as={BsPlusSquareDotted} />
-                        )}
-                    </span>
-                ),
+                Cell: ({ row }: any) => renderExpandIcon(row),
                 width: 50,
                 minWidth: 50,
                 maxWidth: 50,
@@ -125,15 +98,7 @@ const DynamicEntities = () => {
                 Header: "Propertyes",
                 accessor: "properties",
                 width: 60,
-                Cell: ({ value }) => (
-                    <Flex gap={2}>
-                        {value.map((item: any, index: number) => (
-                            <Tag colorScheme={"blue"} key={index}>
-                                {item.propertyName}
-                            </Tag>
-                        ))}
-                    </Flex>
-                ),
+                Cell: ({ value }: any) => renderCell(value),
             },
         ],
         []
@@ -145,25 +110,7 @@ const DynamicEntities = () => {
             {
                 id: "Actions",
                 Header: "Actions",
-                Cell: ({ row }: any) => (
-                    <ButtonGroup gap={3}>
-                        <IconButton
-                            variant="ghost"
-                            aria-label="edit-entity"
-                            className="hovered-icon-btn"
-                            icon={
-                                <HoverIcon
-                                    icon={EditIcon}
-                                    hoverColor="blue.400"
-                                />
-                            }
-                        />
-                        <ConfirmPopover
-                            onConfirm={() => handleDelete(row?.original?.id)}
-                            targetIcon={TrashIcon}
-                        />
-                    </ButtonGroup>
-                ),
+                Cell: ({ row }: any) => renderActionButtons(row, handleDelete),
             },
         ]);
     }, []);
