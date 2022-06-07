@@ -14,7 +14,14 @@ import {
     Textarea,
 } from "@chakra-ui/react";
 
-import { Control, Controller, FieldArrayWithId } from "react-hook-form";
+import {
+    Control,
+    Controller,
+    FieldArrayWithId,
+    type UseFieldArrayRemove,
+    type UseFieldArrayAppend,
+    FieldErrors,
+} from "react-hook-form";
 import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
 import { IoBanSharp } from "react-icons/io5";
 
@@ -24,10 +31,10 @@ import ControllField from "../ControllField";
 
 type BodyContentProps = {
     control: Control<DynamicEntitiesData, any>;
-    append: any;
-    remove: any;
+    append: UseFieldArrayAppend<DynamicEntitiesData, "properties">;
+    remove: UseFieldArrayRemove;
     fields: FieldArrayWithId<DynamicEntitiesData, "properties", "id">[];
-    errors: any;
+    errors: FieldErrors<DynamicEntitiesData>;
     [x: string]: any;
 };
 
@@ -156,15 +163,14 @@ const BodyContent: React.FC<BodyContentProps> = forwardRef<FlexboxProps, any>(
                                     <Controller
                                         control={control}
                                         name={`properties.${index}.dynamicEntityDataBaseProperty.isKey`}
-                                        render={({ field }) => (
+                                        render={({
+                                            field: { value, onChange },
+                                        }) => (
                                             <Switch
+                                                isChecked={value}
                                                 onChange={(
                                                     e: ChangeEvent<HTMLInputElement>
-                                                ) =>
-                                                    field.onChange(
-                                                        e.target.checked
-                                                    )
-                                                }
+                                                ) => onChange(e.target.checked)}
                                             />
                                         )}
                                     />
@@ -179,15 +185,14 @@ const BodyContent: React.FC<BodyContentProps> = forwardRef<FlexboxProps, any>(
                                     <Controller
                                         control={control}
                                         name={`properties.${index}.dynamicEntityDataBaseProperty.isNotNull`}
-                                        render={({ field }) => (
+                                        render={({
+                                            field: { value, onChange },
+                                        }) => (
                                             <Switch
+                                                isChecked={value}
                                                 onChange={(
                                                     e: ChangeEvent<HTMLInputElement>
-                                                ) =>
-                                                    field.onChange(
-                                                        e.target.checked
-                                                    )
-                                                }
+                                                ) => onChange(e.target.checked)}
                                             />
                                         )}
                                     />

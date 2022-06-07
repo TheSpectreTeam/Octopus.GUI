@@ -8,7 +8,6 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
-import { Column } from "react-table";
 import { AddIcon } from "@chakra-ui/icons";
 
 import Card, {
@@ -17,15 +16,12 @@ import Card, {
     CardHeaderActions,
 } from "../../common/Card";
 
-import { ActionModal, Skeleton, ExpandTable } from "./components";
-import { useGetDynamicEntities } from "./querys";
-import { useDelete } from "./mutations";
-import {
-    renderActionButtons,
-    renderCell,
-    renderExpandIcon,
-} from "./components/ExpandTable/helpers";
+import { ActionModal } from "./components";
+import TableQuery from "./components/Table";
+
 import { useKeyEvent } from "../../utils/hooks";
+import { DynamicEntitiesProvider } from "./context";
+import EditModal from "./components/Modal/Edit";
 
 export type DynamicEntityDBProperty = {
     dataBaseTypeName: string;
@@ -48,75 +44,17 @@ export type DynamicEntitiesData = {
     properties: Array<DataProperty>;
 };
 
-const SKELETON_ROWS = 5;
-const DynamicEntitiesContext = React.createContext({});
-DynamicEntitiesContext.displayName = "DynamicEntitiesCntext";
-const DynamicEntitiesProvider = DynamicEntitiesContext.Provider;
-
 const DynamicEntities = () => {
     const { isOpen: isOpenAction, onClose, onOpen } = useDisclosure();
 
-    const { data, isLoading } = useGetDynamicEntities();
-
-    const mutation = useDelete();
     useKeyEvent({
         keyCode: "KeyA",
         pressedKey: "ctrlKey",
         fn: () => onOpen(),
     });
 
-    const handleDelete = React.useCallback(
-        (id: any) => {
-            mutation.mutate(id);
-        },
-        [mutation]
-    );
-
-    const tableData: DynamicEntitiesData[] = React.useMemo(
-        (): DynamicEntitiesData[] => data ?? null,
-        [data]
-    );
-
-    const columns = React.useMemo<Column<DynamicEntitiesData>[]>(
-        () => [
-            {
-                Header: () => null,
-                id: "expander",
-                Cell: ({ row }: any) => renderExpandIcon(row),
-                width: 50,
-                minWidth: 50,
-                maxWidth: 50,
-            },
-            {
-                id: "entityName",
-                Header: "Name",
-                accessor: "entityName",
-                width: 200,
-            },
-            {
-                id: "properties",
-                Header: "Propertyes",
-                accessor: "properties",
-                width: 60,
-                Cell: ({ value }: any) => renderCell(value),
-            },
-        ],
-        []
-    );
-
-    const tableHooks = React.useCallback((hooks: any) => {
-        hooks.visibleColumns.push((column: Column<DynamicEntitiesData>) => [
-            ...columns,
-            {
-                id: "Actions",
-                Header: "Actions",
-                Cell: ({ row }: any) => renderActionButtons(row, handleDelete),
-            },
-        ]);
-    }, []);
-
     return (
-        <>
+        <DynamicEntitiesProvider>
             <Card
                 overflowX={"auto"}
                 width={{ base: "100%", md: "60%" }}
@@ -145,22 +83,12 @@ const DynamicEntities = () => {
                     </CardHeaderActions>
                 </CardHeader>
                 <CardContent>
-                    {isLoading ? (
-                        <Skeleton
-                            rows={SKELETON_ROWS}
-                            columns={columns.length + 1}
-                        />
-                    ) : (
-                        <ExpandTable
-                            data={tableData}
-                            columns={columns}
-                            tableHooks={tableHooks}
-                        />
-                    )}
+                    <TableQuery />
                 </CardContent>
             </Card>
             <ActionModal isOpen={isOpenAction} onClose={onClose} />
-        </>
+            <EditModal />
+        </DynamicEntitiesProvider>
     );
 };
 

@@ -26,10 +26,10 @@ type Props = {
 
 const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const mutation = useAdd();
-    
+
     useEffect(() => {
         if (mutation.isSuccess) {
-            onClose()
+            onClose();
             mutation.reset();
             reset();
         }
@@ -65,7 +65,7 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
     });
 
     const backButtonRef = useRef(null);
-    const initialRef = useRef(null)
+    const initialRef = useRef(null);
     const {
         isOpen: isAlertOpen,
         onOpen: onAlertOpen,
@@ -85,9 +85,8 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
     const handleSendData = (data: DynamicEntitiesData) => {
         mutation.mutate(data);
-        reset();
     };
-   
+
     return (
         <>
             <Modal
@@ -105,7 +104,7 @@ const ActionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         <ModalCloseButton />
                         <ModalBody>
                             <BodyContent
-                                ref = {initialRef}
+                                ref={initialRef}
                                 control={control}
                                 errors={errors}
                                 remove={remove}

@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
+
 import { DynamicEntitiesData } from "..";
-import { useToast } from "@chakra-ui/react";
+import { useToastHook } from "../../../common/Toast";
 
 export const useAdd = () => {
-    const toast = useToast();
+    const [_, newToast] = useToastHook();
     const queryClient = useQueryClient();
     return useMutation(
         (data: DynamicEntitiesData) => {
@@ -13,19 +14,17 @@ export const useAdd = () => {
         {
             onSuccess: (entity) => {
                 queryClient.invalidateQueries("dynamic-entities");
-                toast({
-                    title: "Entity created!",
-                    description: `${JSON.stringify(entity.data, null, 2)}`,
+                newToast({
+                    title: "Entity success added!",
+                    message: `${JSON.stringify(entity.data, null, 2)}`,
                     status: "success",
-                    duration: 5000,
-                    isClosable: true,
                 });
             },
         }
     );
 };
 export const useDelete = () => {
-    const toast = useToast();
+    const [_, newToast] = useToastHook();
     const queryClient = useQueryClient();
     return useMutation(
         (id: string) =>
@@ -35,22 +34,52 @@ export const useDelete = () => {
         {
             onSuccess: (entity) => {
                 queryClient.invalidateQueries("dynamic-entities");
-                toast({
-                    title: "Entity deleted!",
-                    description: `${JSON.stringify(entity, null, 2)}`,
+                newToast({
+                    title: "Entity success deleted!",
+                    message: `${JSON.stringify(entity, null, 2)}`,
                     status: "info",
-                    duration: 5000,
-                    isClosable: true,
+                });
+            },
+            onError: (error) => {
+                newToast({
+                    title: "Entity deleted error!",
+                    message: `${error}`,
+                    status: "error",
+                });
+            },
+        }
+    );
+};
+
+export const useUpdate = () => {
+    const [_, newToast] = useToastHook();
+    const queryClient = useQueryClient();
+
+    return useMutation(
+        (params: { id: string; data: DynamicEntitiesData }): any => {
+            const { id, data } = params;
+            return axios
+                .patch(`http://localhost:3004/de/${id}`, data)
+                .catch((error) => {
+                    throw new Error(error?.message);
+                });
+        },
+        {
+            onSuccess: (entity: DynamicEntitiesData) => {
+                queryClient.invalidateQueries("dynamic-entities");
+                queryClient.setQueryData(["entity", entity.entityName], entity);
+                newToast({
+                    title: "Entity success updated!",
+                    message: `${JSON.stringify(entity, null, 2)}`,
+                    status: "info",
                 });
             },
 
             onError: (error) => {
-                toast({
-                    title: "Deleted error!",
-                    description: `${error}`,
+                newToast({
+                    title: "Entity updated error!",
+                    message: `${error}`,
                     status: "error",
-                    duration: 5000,
-                    isClosable: true,
                 });
             },
         }
